@@ -31,7 +31,6 @@ function getLanguageName(code) {
 
 app.post("/fix", async (req, res) => {
   const { text, lang, mode } = req.body; // mode: "fix" veya "translate"
-  console.log("Gelen istek:", { text, lang, mode });
   let prompt;
 
   if (mode === "fix") {
@@ -42,6 +41,8 @@ app.post("/fix", async (req, res) => {
     } else {
       return res.status(400).json({ error: "Dil kodu desteklenmiyor." });
     }
+  } else if (mode === "rewrite") {
+    prompt = "Aşağıda kullanıcıdan gelen bir talimat ve bir metin yer almaktadır.Talimata uygun şekilde metni yeniden yaz. Anlamı korumaya çalış ama talimatı öncelikli olarak uygula.Talimat ve metin arasına bir boş satır bırakılmıştır. Sadece yeni metni döndür";
   } else if (mode === "translate") {
     prompt = `Lütfen aşağıdaki metni ${getLanguageName(lang)} diline çevir. Yalnızca çeviri çıktısı ver, başka açıklama yazma.`;
   } else {
