@@ -4,16 +4,13 @@ const { OpenAI } = require("openai");
 require("dotenv").config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// OpenAI API key burada .env dosyanda olmalı
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // index.html, css, js vs sunabilsin
 
-// Dil kodu -> dil adı eşlemesi (çeviri için)
 function getLanguageName(code) {
   const map = {
     en: "İngilizce",
@@ -42,7 +39,7 @@ app.post("/fix", async (req, res) => {
 
   try {
     const chat = await openai.chat.completions.create({
-      model: "gpt-4o", // dilersen gpt-3.5-turbo da kullanabilirsin
+      model: "gpt-4o",
       messages: [
         { role: "system", content: prompt },
         { role: "user", content: text }
